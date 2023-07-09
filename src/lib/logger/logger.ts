@@ -1,7 +1,6 @@
 import { printColorMessageToConsole } from '@/lib/colors';
 import { EOL } from 'os';
 import { MessageType } from '../colors/colors';
-import { UserType } from '@/types';
 
 type LogMessageType = string | undefined;
 type LogIdType = string | undefined;
@@ -42,12 +41,12 @@ export const webSocketServerIncomingMessage = (wsId: LogIdType, message: LogMess
         message: `[`,
       },
       {
-        color: 'magenta',
+        color: 'green',
         message: wsId,
       },
       {
         color: 'white',
-        message: `]${EOL}`,
+        message: `]${EOL}  `,
       }
     );
   }
@@ -58,7 +57,7 @@ export const webSocketServerIncomingMessage = (wsId: LogIdType, message: LogMess
       message: `[`,
     },
     {
-      color: 'magenta',
+      color: 'green',
       message: 'Incoming message',
     },
     {
@@ -66,6 +65,29 @@ export const webSocketServerIncomingMessage = (wsId: LogIdType, message: LogMess
       message: `] `,
     },
     ...idMessageChunk,
+    {
+      color: 'white',
+      message: message,
+    }
+  );
+};
+
+export const webSocketServerOutgoingMessage = (message: LogMessageType) => {
+  if (!message) return;
+
+  printColorMessageToConsole(
+    {
+      color: 'white',
+      message: `[`,
+    },
+    {
+      color: 'blue',
+      message: 'Outgoing message',
+    },
+    {
+      color: 'white',
+      message: `] ${EOL}  `,
+    },
     {
       color: 'white',
       message: message,

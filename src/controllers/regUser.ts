@@ -20,7 +20,7 @@ const getUserRegData = (userData: unknown) => {
   }
 };
 
-const regUser: ControllerType = (incomingMessage, ws, db) => {
+const regUser: ControllerType = async (db, incomingMessage, ws) => {
   const responseData = {
     name: '',
     index: -1,
@@ -34,7 +34,7 @@ const regUser: ControllerType = (incomingMessage, ws, db) => {
 
     responseData.name = name;
 
-    const userInDb = db.findUserByUsername(name);
+    const userInDb = await db.findUserByUsername(name);
 
     if (userInDb) {
       const { index, password: userInDbPassword } = userInDb;
@@ -48,7 +48,7 @@ const regUser: ControllerType = (incomingMessage, ws, db) => {
     }
 
     if (!userInDb) {
-      const { index } = db.addUser(name, password);
+      const { index } = await db.addUser(name, password);
       responseData.index = index;
     }
 

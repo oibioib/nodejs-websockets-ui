@@ -6,11 +6,13 @@ export type ExtendWebSocket = WebSocket & {
   id: string;
 };
 
-export type ClientType = {
-  [key: string]: {
-    ws: ExtendWebSocket;
-  };
-};
+// export type ClientsType = {
+//   [key: string]: {
+//     ws: ExtendWebSocket;
+//   };
+// };
+
+export type ClientsType = Map<ExtendWebSocket, undefined>;
 
 export type UserType = {
   index: number;
@@ -34,7 +36,12 @@ export type RouteType = {
 export type RouterType = (incomingMessage: RawData, ws: ExtendWebSocket, db: DB) => void;
 
 export type ControllerType = (
+  db: DB,
   incomingMessage: ParsedIncomingMessageType,
-  ws: ExtendWebSocket,
-  db: DB
-) => void;
+  ws: ExtendWebSocket
+) => Promise<void>;
+
+export type WinnerType = {
+  username: string;
+  wins: number;
+};

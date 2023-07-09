@@ -1,6 +1,7 @@
 import { MESSAGE_TYPE, messageRequiredFields } from '@/config/message';
-import { ParseIncomingMessageType } from '@/types';
+import { ClientsType, ParseIncomingMessageType } from '@/types';
 import { WebSocket } from 'ws';
+import log from '@/lib/logger';
 
 export const parseIncomingMessage: ParseIncomingMessageType = (incomingMessage) => {
   try {
@@ -22,7 +23,6 @@ export const parseIncomingMessage: ParseIncomingMessageType = (incomingMessage) 
 export const parseIncomingData = (incomingData: string) => {
   try {
     const data = JSON.parse(incomingData);
-
     return data;
   } catch (error) {
     throw new Error('Incorrect incoming data.');
@@ -41,4 +41,23 @@ export const sendResponseMessage = (
   });
 
   ws.send(response);
+  log.webSocketServerOutgoingMessage(response);
+};
+
+export const sendResponseMessageToAll = (
+  messageType: MESSAGE_TYPE,
+  responseData: object,
+  clients: ClientsType
+) => {
+  const response = JSON.stringify({
+    type: messageType,
+    data: JSON.stringify(responseData),
+    id: 0,
+  });
+
+  clients.forEach((_, ws) => {
+    ws.send(response);
+  });
+
+  log.webSocketServerOutgoingMessage(response);
 };
