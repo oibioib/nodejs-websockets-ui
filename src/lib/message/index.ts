@@ -1,1 +1,1 @@
-export { parseIncomingMessage } from './message';
+export * from './message';

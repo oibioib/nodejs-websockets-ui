@@ -2,13 +2,13 @@ import { v4 as newUUID } from 'uuid';
 import { ClientType, ExtendWebSocket, UserType } from '@/types';
 
 class DB {
-  users: UserType[];
-  _nextUserId: number;
   wsClients: ClientType;
+  users: UserType[];
+  _nextUserIndex: number;
 
   constructor() {
     this.users = [];
-    this._nextUserId = 0;
+    this._nextUserIndex = 0;
     this.wsClients = {};
   }
 
@@ -23,8 +23,20 @@ class DB {
     delete this.wsClients[`${wsToRemove.id}`];
   }
 
-  addUser(user: UserType) {
-    return;
+  addUser(usernameToAdd: string, password: string) {
+    const newUser: UserType = {
+      index: this._nextUserIndex,
+      username: usernameToAdd,
+      password,
+    };
+
+    this._nextUserIndex = this._nextUserIndex + 1;
+    this.users.push(newUser);
+    return newUser;
+  }
+
+  findUserByUsername(usernameToFind: string) {
+    return this.users.find(({ username }) => usernameToFind === username);
   }
 }
 

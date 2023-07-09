@@ -3,7 +3,7 @@ import { WS_SERVER_PORT } from '@/config/servers';
 import log from '@/lib/logger';
 import { DB } from '@/lib/db';
 import { ExtendWebSocket } from '@/types';
-import { controller } from '@/controller';
+import { router } from '@/router';
 
 const db = new DB();
 
@@ -32,7 +32,7 @@ webSocketServer.on('connection', (ws: ExtendWebSocket) => {
 
   ws.on('message', (message) => {
     log.webSocketServerIncomingMessage(ws.id, message.toString());
-    controller(message);
+    router(message, ws, db);
   });
 });
 

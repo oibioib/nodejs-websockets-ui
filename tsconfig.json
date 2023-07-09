@@ -3,6 +3,7 @@
     "module": "CommonJS",
     "target": "ES2020",
     "moduleResolution": "node",
+    "lib": ["ESNext"],
     "outDir": "./dist",
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,

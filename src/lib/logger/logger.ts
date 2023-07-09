@@ -1,6 +1,7 @@
 import { printColorMessageToConsole } from '@/lib/colors';
 import { EOL } from 'os';
 import { MessageType } from '../colors/colors';
+import { UserType } from '@/types';
 
 type LogMessageType = string | undefined;
 type LogIdType = string | undefined;
