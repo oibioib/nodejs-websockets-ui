@@ -4,13 +4,9 @@ import { RawData, WebSocket } from 'ws';
 
 export type ExtendWebSocket = WebSocket & {
   id: string;
+  userIndex: number;
+  userName: string;
 };
-
-// export type ClientsType = {
-//   [key: string]: {
-//     ws: ExtendWebSocket;
-//   };
-// };
 
 export type ClientsType = Map<ExtendWebSocket, undefined>;
 
@@ -42,6 +38,55 @@ export type ControllerType = (
 ) => Promise<void>;
 
 export type WinnerType = {
-  username: string;
+  name: string;
   wins: number;
+};
+
+export type RoomUserType = {
+  name: string;
+  index: number;
+};
+
+export type BoardShipType = {
+  ship: number[];
+  aroundShip: number[];
+};
+
+export type BoardType = {
+  ships: BoardShipType[];
+  attacked: number[];
+};
+
+type GameType = {
+  [key: string]: BoardType;
+};
+
+export type ShipType = {
+  position: {
+    x: number;
+    y: number;
+  };
+  direction: boolean;
+  type: string;
+  length: number;
+};
+
+export type GameDataType = {
+  gameId: number;
+  ships: ShipType[];
+  indexPlayer: number;
+};
+
+type IncomingDataType = {
+  [key: string]: GameDataType;
+};
+
+export type RoomType = {
+  roomId: number;
+  roomUsers: RoomUserType[];
+  roomCreatorIndex: number;
+  nextTurn: number;
+  isGameAvailableToJoin: boolean;
+  game: GameType;
+  data: IncomingDataType;
 };
