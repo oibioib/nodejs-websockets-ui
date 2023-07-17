@@ -1,6 +1,8 @@
 import { MESSAGE_TYPE } from '@/config/message';
 import { parseIncomingData, sendResponseMessage } from '@/lib/message';
 import { ControllerType } from '@/types/types';
+import updateWinners from './updateWinners';
+import updateRoom from './updateRoom';
 
 type RegUserDataType = {
   name: string;
@@ -40,6 +42,8 @@ const regUser: ControllerType = async (db, incomingMessage, ws) => {
       const { index, password: userInDbPassword } = userInDb;
 
       responseData.index = index;
+      ws.userIndex = index;
+      ws.userName = name;
 
       if (userInDbPassword !== password) {
         responseData.error = true;
@@ -50,9 +54,16 @@ const regUser: ControllerType = async (db, incomingMessage, ws) => {
     if (!userInDb) {
       const { index } = await db.addUser(name, password);
       responseData.index = index;
+      ws.userIndex = index;
+      ws.userName = name;
     }
 
     sendResponseMessage(MESSAGE_TYPE.REG, responseData, ws);
+
+    if (!responseData.error) {
+      await updateWinners(db);
+      await updateRoom(db);
+    }
   } catch (error) {
     responseData.errorText = error.message;
     sendResponseMessage(MESSAGE_TYPE.REG, responseData, ws);
