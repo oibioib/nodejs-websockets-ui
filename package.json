@@ -2,9 +2,12 @@
   "name": "ws_task",
   "version": "1.0.0",
   "description": "Node.JS WebSocket task",
-  "main": "index.js",
+  "main": "src/index.ts",
   "scripts": {
-    "start": "tsnd -r tsconfig-paths/register ./src/index.ts",
+    "start": "npm run start:prod",
+    "start:prod": "npm run build && node ./dist/index.js",
+    "start:dev": "tsnd -r tsconfig-paths/register ./src/index.ts",
+    "build": "webpack",
     "lint": "eslint ./src --ext .ts,.tsx --ignore-path ./.gitignore --max-warnings=0 --fix"
   },
   "author": "Pavel Bodal",
@@ -21,9 +24,13 @@
     "eslint-plugin-prettier": "^4.2.1",
     "nodemon": "^2.0.16",
     "prettier": "^2.8.8",
+    "ts-loader": "^9.4.4",
     "ts-node-dev": "^2.0.0",
     "tsconfig-paths": "^4.2.0",
-    "typescript": "^5.1.6"
+    "tsconfig-paths-webpack-plugin": "^4.1.0",
+    "typescript": "^5.1.6",
+    "webpack": "^5.88.1",
+    "webpack-cli": "^5.1.4"
   },
   "dependencies": {
     "uuid": "^9.0.0",
