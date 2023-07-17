@@ -17,6 +17,7 @@ const finish = async (db: DB, room: RoomType, winnerName: string) => {
     }
 
     await updateWinners(db);
+    await db.closeRoom(room);
   } catch (error) {
     log.serverErrorMessage(`FinishError. ${error.message}`);
   }

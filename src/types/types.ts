@@ -87,6 +87,7 @@ export type RoomType = {
   roomCreatorIndex: number;
   nextTurn: number;
   isGameAvailableToJoin: boolean;
+  isClosed: boolean;
   game: GameType;
   data: IncomingDataType;
 };

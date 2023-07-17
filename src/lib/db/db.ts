@@ -61,7 +61,7 @@ class DB {
     return ws;
   }
 
-  removeWsClient(ws: ExtendWebSocket) {
+  async removeWsClient(ws: ExtendWebSocket) {
     this.wsClients.delete(ws);
   }
 
@@ -96,6 +96,14 @@ class DB {
     return room;
   }
 
+  async getRoomByUserId(userId: number) {
+    const rooms = this.rooms.filter(({ roomUsers }) => {
+      return roomUsers.some(({ index }) => index === userId);
+    });
+
+    return rooms;
+  }
+
   async addRoomBoardByUserIndex(
     roomId: number,
     index: number,
@@ -125,6 +133,7 @@ class DB {
       roomCreatorIndex: index,
       nextTurn: index,
       isGameAvailableToJoin: true,
+      isClosed: false,
       game: {},
       data: {},
     };
@@ -132,6 +141,10 @@ class DB {
     this._nextRoomIndex += 1;
     this.rooms.push(newRoom);
     return newRoom;
+  }
+
+  async closeRoom(room: RoomType) {
+    room.isClosed = true;
   }
 
   async addUserToTheRoom(ws: ExtendWebSocket, indexRoom: number) {

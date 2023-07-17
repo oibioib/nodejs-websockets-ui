@@ -4,6 +4,7 @@ import { log } from '@/lib/logger';
 import { DB } from '@/lib/db';
 import { ExtendWebSocket } from '@/types';
 import { router } from '@/router';
+import { closeWs } from '@/controllers';
 
 const db = new DB();
 const webSocketServer = new WebSocketServer({ port: WS_SERVER_PORT });
@@ -22,12 +23,11 @@ webSocketServer.on('close', () => {
 
 webSocketServer.on('connection', (ws: ExtendWebSocket) => {
   db.addWsClient(ws);
-
   log.clientMessage(`Client connected. Socket ID: ${ws.id}`);
 
-  ws.on('close', () => {
+  ws.on('close', async () => {
     log.clientMessage(`Client disconnected. Socket ID: ${ws.id}`);
-    db.removeWsClient(ws);
+    closeWs(db, ws);
   });
 
   ws.on('message', (message) => {

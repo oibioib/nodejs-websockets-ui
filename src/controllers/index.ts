@@ -5,3 +5,4 @@ export { default as addShips } from './addShips';
 export { default as attack } from './attack';
 export { default as randomAttack } from './randomAttack';
 export { default as singlePlay } from './singlePlay';
+export { default as closeWs } from './closeWs';
