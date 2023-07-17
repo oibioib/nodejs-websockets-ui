@@ -1,12 +1,11 @@
 import { WebSocketServer } from 'ws';
 import { WS_SERVER_PORT } from '@/config/servers';
-import log from '@/lib/logger';
+import { log } from '@/lib/logger';
 import { DB } from '@/lib/db';
 import { ExtendWebSocket } from '@/types';
 import { router } from '@/router';
 
 const db = new DB();
-
 const webSocketServer = new WebSocketServer({ port: WS_SERVER_PORT });
 
 webSocketServer.on('listening', () =>
@@ -27,11 +26,12 @@ webSocketServer.on('connection', (ws: ExtendWebSocket) => {
   log.clientMessage(`Client connected. Socket ID: ${ws.id}`);
 
   ws.on('close', () => {
+    log.clientMessage(`Client disconnected. Socket ID: ${ws.id}`);
     db.removeWsClient(ws);
   });
 
   ws.on('message', (message) => {
-    log.webSocketServerIncomingMessage(ws.id, message.toString());
+    log.webSocketServerIncomingMessage(ws, message.toString());
     router(message, ws, db);
   });
 });

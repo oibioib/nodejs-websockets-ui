@@ -1,9 +1,9 @@
 import { printColorMessageToConsole } from '@/lib/colors';
 import { EOL } from 'os';
 import { MessageType } from '../colors/colors';
+import { ExtendWebSocket } from '@/types';
 
 type LogMessageType = string | undefined;
-type LogIdType = string | undefined;
 
 export const httpServerMessage = (message: LogMessageType) => {
   if (!message) return;
@@ -23,38 +23,74 @@ export const webSocketServerMessage = (message: LogMessageType) => {
 
 export const clientMessage = (message: LogMessageType) => {
   if (!message) return;
-  printColorMessageToConsole({
-    color: 'magenta',
-    message,
-  });
+  printColorMessageToConsole(
+    {
+      color: 'white',
+      message: EOL,
+    },
+    {
+      color: 'magenta',
+      message,
+    }
+  );
 };
 
-export const webSocketServerIncomingMessage = (wsId: LogIdType, message: LogMessageType) => {
+export const webSocketServerIncomingMessage = (ws: ExtendWebSocket, message: LogMessageType) => {
   if (!message) return;
 
-  const idMessageChunk: MessageType[] = [];
+  const { id, userIndex, userName } = ws;
 
-  if (wsId) {
-    idMessageChunk.push(
+  const messageChunk: MessageType[] = [];
+
+  if (id) {
+    messageChunk.push(
       {
         color: 'white',
         message: `[`,
       },
       {
         color: 'green',
-        message: wsId,
+        message: id,
       },
       {
         color: 'white',
-        message: `]${EOL}  `,
+        message: `] `,
       }
     );
+  }
+
+  if (userIndex) {
+    messageChunk.push(
+      {
+        color: 'white',
+        message: `[`,
+      },
+      {
+        color: 'green',
+        message: userName ? `User: ${userName}, ` : '',
+      },
+      {
+        color: 'green',
+        message: `UserIndex: ${userIndex}`,
+      },
+      {
+        color: 'white',
+        message: `] `,
+      }
+    );
+  }
+
+  if (messageChunk.length) {
+    messageChunk.push({
+      color: 'white',
+      message: `${EOL}  `,
+    });
   }
 
   printColorMessageToConsole(
     {
       color: 'white',
-      message: `[`,
+      message: `${EOL}[`,
     },
     {
       color: 'green',
@@ -64,7 +100,7 @@ export const webSocketServerIncomingMessage = (wsId: LogIdType, message: LogMess
       color: 'white',
       message: `] `,
     },
-    ...idMessageChunk,
+    ...messageChunk,
     {
       color: 'white',
       message: message,
@@ -78,7 +114,7 @@ export const webSocketServerOutgoingMessage = (message: LogMessageType) => {
   printColorMessageToConsole(
     {
       color: 'white',
-      message: `[`,
+      message: `${EOL}[`,
     },
     {
       color: 'blue',
@@ -100,7 +136,7 @@ export const serverErrorMessage = (message: LogMessageType) => {
   printColorMessageToConsole(
     {
       color: 'white',
-      message: `[`,
+      message: `${EOL}[`,
     },
     {
       color: 'red',
@@ -112,6 +148,28 @@ export const serverErrorMessage = (message: LogMessageType) => {
     },
     {
       color: 'red',
+      message: message,
+    }
+  );
+};
+
+export const infoMessage = (message: LogMessageType) => {
+  if (!message) return;
+  printColorMessageToConsole(
+    {
+      color: 'white',
+      message: `${EOL}[`,
+    },
+    {
+      color: 'yellow',
+      message: 'Info',
+    },
+    {
+      color: 'white',
+      message: `] `,
+    },
+    {
+      color: 'yellow',
       message: message,
     }
   );

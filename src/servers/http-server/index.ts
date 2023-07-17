@@ -3,7 +3,7 @@ import * as path from 'path';
 import * as http from 'http';
 
 import { STATIC_SERVER_PORT } from '@/config/servers';
-import log from '@/lib/logger';
+import { log } from '@/lib/logger';
 
 const httpServer = http.createServer(function (req, res) {
   const __dirname = path.resolve(path.dirname(''));

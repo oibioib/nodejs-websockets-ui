@@ -1,7 +1,7 @@
 import { MESSAGE_TYPE, messageRequiredFields } from '@/config/message';
 import { ClientsType, ParseIncomingMessageType } from '@/types';
 import { WebSocket } from 'ws';
-import log from '@/lib/logger';
+import { log } from '@/lib/logger';
 
 export const parseIncomingMessage: ParseIncomingMessageType = (incomingMessage) => {
   try {
