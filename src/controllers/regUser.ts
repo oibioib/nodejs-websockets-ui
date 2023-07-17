@@ -1,6 +1,6 @@
 import { MESSAGE_TYPE } from '@/config/message';
 import { parseIncomingData, sendResponseMessage } from '@/lib/message';
-import { ControllerType } from '@/types/types';
+import { ControllerType } from '@/types';
 import updateWinners from './updateWinners';
 import updateRoom from './updateRoom';
 
@@ -23,6 +23,7 @@ const getUserRegData = (userData: unknown) => {
 };
 
 const regUser: ControllerType = async (db, incomingMessage, ws) => {
+  if (!ws) return;
   const responseData = {
     name: '',
     index: -1,

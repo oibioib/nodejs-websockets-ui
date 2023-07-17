@@ -32,8 +32,10 @@ export const parseIncomingData = (incomingData: string) => {
 export const sendResponseMessage = (
   messageType: MESSAGE_TYPE,
   responseData: object,
-  ws: WebSocket
+  ws: WebSocket | undefined
 ) => {
+  if (!ws) return;
+
   const response = JSON.stringify({
     type: messageType,
     data: JSON.stringify(responseData),

@@ -1,10 +1,10 @@
+import { BOARD_SIZE } from '@/config/board';
 import { log } from '@/lib/logger';
 import { parseIncomingData } from '@/lib/message';
+import { XYToIndex, getIndexAround } from '@/lib/board';
 import { BoardType, ControllerType, GameDataType, ShipType } from '@/types';
 import startGame from './startGame';
 import turn from './turn';
-import { XYToIndex, getIndexAround } from '@/lib/board';
-import { BOARD_SIZE } from '@/config/board';
 
 const createBoard = (ships: ShipType[]) => {
   const board: BoardType = {
@@ -12,7 +12,7 @@ const createBoard = (ships: ShipType[]) => {
     attacked: [],
   };
 
-  ships.forEach((ship, i) => {
+  ships.forEach((ship) => {
     const {
       position: { x, y },
       direction,
@@ -54,6 +54,8 @@ const createBoard = (ships: ShipType[]) => {
 
 const addShips: ControllerType = async (db, incomingMessage, ws) => {
   try {
+    if (!ws) return;
+
     const parsedData = parseIncomingData(incomingMessage.data) as GameDataType;
     const { ships, gameId } = parsedData;
     const { userIndex } = ws;

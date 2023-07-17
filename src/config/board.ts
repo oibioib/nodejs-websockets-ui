@@ -5,3 +5,5 @@ export enum ATTACK_STATUS {
   KILLED = 'killed',
   SHOT = 'shot',
 }
+
+export const BOT_INDEX = -1;

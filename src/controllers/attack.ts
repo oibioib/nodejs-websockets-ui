@@ -1,4 +1,4 @@
-import { ATTACK_STATUS, BOARD_SIZE } from '@/config/board';
+import { ATTACK_STATUS, BOARD_SIZE, BOT_INDEX } from '@/config/board';
 import { MESSAGE_TYPE } from '@/config/message';
 import { XYToIndex, indexToXY } from '@/lib/board';
 import { log } from '@/lib/logger';
@@ -6,6 +6,7 @@ import { parseIncomingData, sendResponseMessage } from '@/lib/message';
 import { ControllerType } from '@/types';
 import turn from './turn';
 import finish from './finish';
+import randomAttackBot from './randomAttackBot';
 
 type AttackDataType = {
   gameId: number;
@@ -85,6 +86,10 @@ const attack: ControllerType = async (db, incomingMessage, ws) => {
           await finish(db, room, winner);
         } else {
           await turn(db, room);
+
+          if (indexPlayer === BOT_INDEX) {
+            await randomAttackBot(db, gameId);
+          }
         }
       }
 
@@ -93,6 +98,10 @@ const attack: ControllerType = async (db, incomingMessage, ws) => {
         sendResponseMessage(MESSAGE_TYPE.ATTACK, data, ws);
         await db.changeNextTurn(gameId, +opponentId);
         await turn(db, room);
+
+        if (opponentId === BOT_INDEX.toString()) {
+          await randomAttackBot(db, gameId);
+        }
       }
     }
 

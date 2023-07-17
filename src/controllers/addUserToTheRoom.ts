@@ -1,6 +1,6 @@
-import { parseIncomingData } from '@/lib/message';
-import { ControllerType } from '@/types/types';
 import { log } from '@/lib/logger';
+import { parseIncomingData } from '@/lib/message';
+import { ControllerType } from '@/types';
 import updateRoom from './updateRoom';
 import createGame from './createGame';
 
@@ -21,6 +21,8 @@ const getRoomData = (roomData: unknown) => {
 
 const addUserToTheRoom: ControllerType = async (db, incomingMessage, ws) => {
   try {
+    if (!ws) return;
+
     const parsedData = parseIncomingData(incomingMessage.data);
     const { indexRoom } = getRoomData(parsedData);
 

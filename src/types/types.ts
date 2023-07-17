@@ -34,7 +34,7 @@ export type RouterType = (incomingMessage: RawData, ws: ExtendWebSocket, db: DB)
 export type ControllerType = (
   db: DB,
   incomingMessage: ParsedIncomingMessageType,
-  ws: ExtendWebSocket
+  ws: ExtendWebSocket | undefined
 ) => Promise<void>;
 
 export type WinnerType = {

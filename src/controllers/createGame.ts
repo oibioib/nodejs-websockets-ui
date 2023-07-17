@@ -1,8 +1,8 @@
-import { RoomType } from '@/types';
+import { MESSAGE_TYPE } from '@/config/message';
 import { log } from '@/lib/logger';
 import { DB } from '@/lib/db';
 import { sendResponseMessage } from '@/lib/message';
-import { MESSAGE_TYPE } from '@/config/message';
+import { RoomType } from '@/types';
 
 type CreateGameType = (db: DB, room: RoomType) => Promise<void>;
 

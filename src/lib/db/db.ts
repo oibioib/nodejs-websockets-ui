@@ -8,6 +8,8 @@ import {
   UserType,
   WinnerType,
 } from '@/types';
+import { getRandomBoard } from '../random';
+import { BOT_INDEX } from '@/config/board';
 
 class DB {
   wsClients: ClientsType;
@@ -21,12 +23,7 @@ class DB {
     this.wsClients = new Map();
     this.users = [];
     this._nextUserIndex = 1;
-    this.winners = [
-      { name: 'Dasha', wins: 6 },
-      { name: 'Pasha', wins: 20 },
-      { name: 'Pasha2', wins: 201 },
-      { name: 'Pasha3', wins: 5 },
-    ];
+    this.winners = [];
     this.rooms = [];
     this._nextRoomIndex = 1;
   }
@@ -38,8 +35,10 @@ class DB {
   getWsClientsByRoom(room: RoomType) {
     const { roomUsers } = room;
 
+    const usersToGet = roomUsers.filter((user) => user.index !== BOT_INDEX);
+
     const clients = this.wsClients;
-    const clientsToGetId = roomUsers.map(({ index }) => index);
+    const clientsToGetId = usersToGet.map(({ index }) => index);
     const clientsToGet: ExtendWebSocket[] = [];
 
     clients.forEach((_, ws) => {
@@ -48,7 +47,7 @@ class DB {
       }
     });
 
-    if (clientsToGet.length === roomUsers.length) {
+    if (clientsToGet.length === usersToGet.length) {
       return Promise.resolve(clientsToGet);
     } else {
       return Promise.resolve(undefined);
@@ -222,6 +221,19 @@ class DB {
       }
 
       return index;
+    }
+  }
+
+  async addBotToRoom(roomId: number) {
+    const room = await this.getRoomByID(roomId);
+    if (room) {
+      room.isGameAvailableToJoin = false;
+      const index = BOT_INDEX;
+      room.roomUsers.push({ name: 'bot', index });
+      room.game[index] = {
+        ships: getRandomBoard(),
+        attacked: [],
+      };
     }
   }
 }

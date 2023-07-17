@@ -6,6 +6,7 @@ import {
   addShips,
   attack,
   randomAttack,
+  singlePlay,
 } from '@/controllers';
 import { RouteType } from '@/types';
 
@@ -16,6 +17,7 @@ const routes: RouteType[] = [
   { command: MESSAGE_TYPE.ADD_SHIPS, controller: addShips },
   { command: MESSAGE_TYPE.ATTACK, controller: attack },
   { command: MESSAGE_TYPE.RANDOM_ATTACK, controller: randomAttack },
+  { command: MESSAGE_TYPE.SINGLE_PLAY, controller: singlePlay },
 ];
 
 export default routes;
