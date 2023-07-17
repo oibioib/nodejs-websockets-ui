@@ -1,5 +1,5 @@
 import { parseIncomingMessage } from '@/lib/message';
-import log from '@/lib/logger';
+import { log } from '@/lib/logger';
 import routes from './routes';
 import { RouterType } from '@/types';
 

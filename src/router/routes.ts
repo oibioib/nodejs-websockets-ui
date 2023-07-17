@@ -1,16 +1,21 @@
 import { MESSAGE_TYPE } from '@/config/message';
-import { regUser, updateWinners } from '@/controllers';
+import {
+  addUserToTheRoom,
+  createRoom,
+  regUser,
+  addShips,
+  attack,
+  randomAttack,
+} from '@/controllers';
 import { RouteType } from '@/types';
 
 const routes: RouteType[] = [
-  {
-    command: MESSAGE_TYPE.REG,
-    controller: async (...args) => {
-      const [db] = args;
-      await regUser(...args);
-      await updateWinners(db);
-    },
-  },
+  { command: MESSAGE_TYPE.REG, controller: regUser },
+  { command: MESSAGE_TYPE.CREATE_ROOM, controller: createRoom },
+  { command: MESSAGE_TYPE.ADD_USER_TO_ROOM, controller: addUserToTheRoom },
+  { command: MESSAGE_TYPE.ADD_SHIPS, controller: addShips },
+  { command: MESSAGE_TYPE.ATTACK, controller: attack },
+  { command: MESSAGE_TYPE.RANDOM_ATTACK, controller: randomAttack },
 ];
 
 export default routes;
